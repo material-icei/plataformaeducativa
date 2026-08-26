@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>EduICEI · Tu aventura de aprendizaje</title>
+<meta name="description" content="EduICEI es la plataforma educativa del Colegio ICEI: elegí tu ciclo, tu grado y tu área, y avanzá misión por misión.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<a class="salto-contenido" href="#contenido-principal">Saltar al contenido principal</a>
+
+<!-- ============================================================
+     BARRA DE NAVEGACIÓN
+     ============================================================ -->
+<header class="barra-nav" id="barra-nav">
+  <div class="barra-nav__interior contenedor">
+    <a class="marca" href="#inicio" data-nav-link data-destino="inicio">
+      <img class="marca__escudo" src="assets/escudo-icei.png" alt="Escudo del Colegio ICEI" width="40" height="54"
+           onerror="this.onerror=null;this.replaceWith(Object.assign(document.createElement('span'),{className:'marca__escudo marca__escudo--respaldo',innerHTML:'&#128737;&#65039;'}));">
+      <span class="marca__texto">Edu<span class="marca__acento">ICEI</span></span>
+    </a>
+
+    <nav class="nav-principal" id="nav-principal" aria-label="Navegación principal">
+      <ul class="nav-principal__lista">
+        <li><a href="#inicio" class="nav-principal__enlace" data-nav-link data-destino="inicio">Inicio</a></li>
+        <li><a href="#ciclos" class="nav-principal__enlace" data-nav-link data-destino="ciclos">Ciclos</a></li>
+        <li><a href="#biblioteca" class="nav-principal__enlace" data-nav-link data-destino="biblioteca">Biblioteca Virtual</a></li>
+      </ul>
+    </nav>
+
+    <button class="boton-hamburguesa" id="boton-hamburguesa" type="button" aria-expanded="false" aria-controls="nav-principal">
+      <span class="boton-hamburguesa__linea"></span>
+      <span class="boton-hamburguesa__linea"></span>
+      <span class="boton-hamburguesa__linea"></span>
+      <span class="sr-solo">Abrir menú de navegación</span>
+    </button>
+  </div>
+</header>
+
+<main id="contenido-principal">
+
+  <!-- ============================================================
+       HERO
+       ============================================================ -->
+  <section class="hero" id="inicio" aria-label="Presentación de EduICEI">
+    <div class="hero__fondo" aria-hidden="true">
+      <div class="hero__resplandor hero__resplandor--rojo"></div>
+      <div class="hero__resplandor hero__resplandor--azul"></div>
+      <div class="hero__rejilla"></div>
+    </div>
+
+    <div class="hero__interior contenedor">
+      <div class="hero__columna-texto">
+        <p class="hero__etiqueta" data-anim="subir">
+          <img class="hero__etiqueta-escudo" src="assets/escudo-icei.png" alt=""
+               onerror="this.style.display='none';">
+          Colegio ICEI · Plataforma educativa
+        </p>
+        <h1 class="hero__titulo" data-anim="subir" data-retardo="1">¡Tu aventura<br>comienza aquí!</h1>
+        <p class="hero__subtitulo" data-anim="subir" data-retardo="2">Practicá &bull; Desafiate &bull; Avanzá</p>
+        <p class="hero__descripcion" data-anim="subir" data-retardo="3">Actividades &middot; Misiones &middot; Biblioteca Virtual</p>
+
+        <div class="hero__acciones" data-anim="subir" data-retardo="4">
+          <button class="boton boton--primario" type="button" data-scroll-a="ciclos">
+            Comenzar aventura
+          </button>
+          <button class="boton boton--fantasma" type="button" data-scroll-a="biblioteca">
+            Biblioteca Virtual
+          </button>
+        </div>
+      </div>
+
+      <div class="hero__columna-escena" aria-hidden="true">
+        <div class="escena-hero" id="escena-hero">
+          <div class="escena-hero__aro"></div>
+          <div class="escena-hero__personaje escena-hero__personaje--flotar">
+            <div class="personaje-guia personaje-guia--ciclo1 personaje-guia--grande">
+              <span class="personaje-guia__cuerpo"></span>
+              <span class="personaje-guia__cara">
+                <span class="personaje-guia__ojo"></span>
+                <span class="personaje-guia__ojo"></span>
+              </span>
+              <span class="personaje-guia__insignia">🧭</span>
+            </div>
+          </div>
+          <span class="objeto-flotante objeto-flotante--1">📖</span>
+          <span class="objeto-flotante objeto-flotante--2">✏️</span>
+          <span class="objeto-flotante objeto-flotante--3">📐</span>
+          <span class="objeto-flotante objeto-flotante--4">🧮</span>
+          <span class="objeto-flotante objeto-flotante--5">🌍</span>
+          <span class="objeto-flotante objeto-flotante--6">⭐</span>
+          <span class="objeto-flotante objeto-flotante--7">🔤</span>
+          <span class="objeto-flotante objeto-flotante--8">📓</span>
+          <span class="particula particula--1"></span>
+          <span class="particula particula--2"></span>
+          <span class="particula particula--3"></span>
+          <span class="particula particula--4"></span>
+          <span class="particula particula--5"></span>
+        </div>
+      </div>
+    </div>
+
+    <button class="hero__indicador-scroll" type="button" data-scroll-a="ciclos" aria-label="Ir a la sección de ciclos">
+      <span></span>
+    </button>
+  </section>
+
+  <!-- ============================================================
+       RUTA DE AVENTURA (breadcrumb tipo videojuego)
+       ============================================================ -->
+  <nav class="ruta-aventura" id="ruta-aventura" aria-label="Progreso de tu aventura">
+    <div class="ruta-aventura__interior contenedor" id="ruta-aventura-interior">
+      <!-- Generado dinámicamente por script.js -->
+    </div>
+  </nav>
+
+  <!-- ============================================================
+       SECCIÓN CICLOS — "ELEGÍ TU AVENTURA"
+       ============================================================ -->
+  <section class="seccion seccion--ciclos" id="ciclos" aria-labelledby="titulo-ciclos">
+    <div class="contenedor">
+      <header class="seccion__encabezado" data-anim="subir">
+        <p class="seccion__superindice">Paso 1 de 3</p>
+        <h2 class="seccion__titulo" id="titulo-ciclos">Elegí tu aventura</h2>
+        <p class="seccion__texto">Cada ciclo es una etapa distinta del mundo EduICEI. Explorá la tuya para desbloquear tus misiones.</p>
+      </header>
+
+      <div class="rejilla-ciclos" id="rejilla-ciclos" role="list">
+        <!-- Tarjetas de ciclo generadas dinámicamente por script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECCIÓN NIVELES (GRADOS) — se revela al elegir un ciclo
+       ============================================================ -->
+  <section class="seccion seccion--niveles oculta" id="niveles" aria-labelledby="titulo-niveles">
+    <div class="contenedor">
+      <header class="seccion__encabezado" data-anim="subir">
+        <button class="boton-volver" type="button" id="volver-a-ciclos">
+          <span aria-hidden="true">←</span> Elegí tu aventura
+        </button>
+        <p class="seccion__superindice">Paso 2 de 3</p>
+        <h2 class="seccion__titulo" id="titulo-niveles">Elegí tu nivel</h2>
+        <p class="seccion__texto" id="niveles-descripcion"></p>
+      </header>
+
+      <div class="rejilla-niveles" id="rejilla-niveles" role="list">
+        <!-- Tarjetas de grado generadas dinámicamente por script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       SECCIÓN ÁREAS + MISIONES — se revela al elegir un grado
+       ============================================================ -->
+  <section class="seccion seccion--areas oculta" id="areas" aria-labelledby="titulo-areas">
+    <div class="contenedor">
+      <header class="seccion__encabezado" data-anim="subir">
+        <button class="boton-volver" type="button" id="volver-a-niveles">
+          <span aria-hidden="true">←</span> Elegí tu nivel
+        </button>
+        <p class="seccion__superindice">Paso 3 de 3</p>
+        <h2 class="seccion__titulo" id="titulo-areas">Elegí tu área</h2>
+        <p class="seccion__texto" id="areas-descripcion"></p>
+      </header>
+
+      <div class="lista-areas" id="lista-areas">
+        <!-- Tarjetas de área + acordeón de misiones generadas dinámicamente por script.js -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       BIBLIOTECA VIRTUAL
+       ============================================================ -->
+  <section class="seccion seccion--biblioteca" id="biblioteca" aria-labelledby="titulo-biblioteca">
+    <div class="contenedor panel-biblioteca">
+      <div class="panel-biblioteca__contenido" data-anim="subir">
+        <p class="seccion__superindice">Zona especial</p>
+        <h2 class="seccion__titulo" id="titulo-biblioteca">Biblioteca Virtual</h2>
+        <p class="seccion__texto">
+          Un rincón de la aventura con libros, cuentos y recursos para seguir explorando el conocimiento
+          fuera de tus misiones. Estamos preparando este espacio.
+        </p>
+        <span class="etiqueta-estado etiqueta-estado--proximamente">
+          <span aria-hidden="true">🔒</span> Próximamente
+        </span>
+      </div>
+      <div class="panel-biblioteca__decoracion" aria-hidden="true">
+        <span class="panel-biblioteca__libro panel-biblioteca__libro--1">📗</span>
+        <span class="panel-biblioteca__libro panel-biblioteca__libro--2">📘</span>
+        <span class="panel-biblioteca__libro panel-biblioteca__libro--3">📙</span>
+        <span class="panel-biblioteca__libro panel-biblioteca__libro--4">📕</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="pie-pagina">
+  <div class="contenedor pie-pagina__interior">
+    <div class="pie-pagina__marca">
+      <img class="pie-pagina__escudo" src="assets/escudo-icei.png" alt="Escudo del Colegio ICEI"
+           onerror="this.style.display='none';">
+      <span class="pie-pagina__nombre">EduICEI</span>
+    </div>
+    <p class="pie-pagina__frase">Aprender es una aventura.</p>
+    <p class="pie-pagina__copy">&copy; <span id="anio-actual"></span> Colegio ICEI. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<!-- ============================================================
+     MODAL "PRÓXIMAMENTE"
+     ============================================================ -->
+<div class="modal-fondo" id="modal-fondo" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo" aria-describedby="modal-texto" id="modal-proximamente">
+    <button class="modal__cerrar" type="button" id="modal-cerrar" aria-label="Cerrar">&times;</button>
+    <p class="modal__cohete" aria-hidden="true">🚀</p>
+    <h3 class="modal__titulo" id="modal-titulo">¡Nueva misión en camino!</h3>
+    <p class="modal__texto" id="modal-texto">Esta aventura todavía está siendo preparada. Muy pronto vas a poder descubrir este nuevo desafío.</p>
+    <button class="boton boton--primario modal__boton" type="button" id="modal-volver">Volver a la aventura</button>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,1406 @@
+/* ============================================================================
+   EduICEI — style.css
+   Hoja de estilos única para la plataforma educativa gamificada del
+   Colegio ICEI. CSS3 puro (variables, Grid, Flexbox, clamp(), media queries).
+
+   Índice:
+     1. Variables institucionales y tokens de diseño
+     2. Reset y base
+     3. Utilidades y layout compartido
+     4. Accesibilidad (foco, sr-only, reduced motion)
+     5. Barra de navegación
+     6. Hero
+     7. Ruta de aventura (breadcrumb)
+     8. Sección Ciclos + tarjeta de ciclo + personajes guía
+     9. Sección Niveles (grados)
+     10. Sección Áreas + acordeón de misiones
+     11. Biblioteca Virtual
+     12. Footer
+     13. Modal "Próximamente"
+     14. Botones
+     15. Animaciones
+     16. Media queries de responsive
+   ============================================================================ */
+
+/* ==========================================================================
+   1. VARIABLES INSTITUCIONALES Y TOKENS DE DISEÑO
+   ========================================================================== */
+:root {
+  /* Colores institucionales (no modificar) */
+  --rojo: #af1b2e;
+  --azul: #002368;
+  --blanco: #ffffff;
+
+  /* Tonos derivados para profundidad visual */
+  --azul-profundo: #00081d;
+  --azul-panel: #072863;
+  --azul-panel-alto: #0d3690;
+  --azul-luminoso: #4f7fff;
+  --azul-luminoso-suave: rgba(79, 127, 255, 0.18);
+  --rojo-luminoso: #e2495f;
+  --rojo-luminoso-suave: rgba(175, 27, 46, 0.28);
+  --niebla: #b7c3e8;
+  --niebla-tenue: #7f8fc0;
+  --borde: rgba(255, 255, 255, 0.14);
+  --borde-fuerte: rgba(255, 255, 255, 0.26);
+
+  /* Tipografía */
+  --fuente-display: "Oxanium", "Segoe UI", sans-serif;
+  --fuente-cuerpo: "Rajdhani", "Segoe UI", sans-serif;
+
+  /* Radios y sombras */
+  --radio-s: 10px;
+  --radio-m: 18px;
+  --radio-l: 28px;
+  --radio-full: 999px;
+  --sombra-panel: 0 20px 50px -20px rgba(0, 3, 15, 0.7);
+  --resplandor-azul: 0 0 0 1px var(--borde), 0 0 32px -6px var(--azul-luminoso-suave);
+  --resplandor-rojo: 0 0 0 1px rgba(226, 73, 95, 0.35), 0 0 28px -6px var(--rojo-luminoso-suave);
+
+  /* Movimiento */
+  --duracion-r: 0.25s;
+  --duracion-m: 0.4s;
+  --duracion-l: 0.7s;
+  --curva: cubic-bezier(0.22, 1, 0.36, 1);
+
+  /* Layout */
+  --ancho-maximo: 1280px;
+  --espacio-seccion: clamp(3.5rem, 6vw, 7rem);
+  --altura-nav: clamp(64px, 9vh, 88px);
+}
+
+/* ==========================================================================
+   2. RESET Y BASE
+   ========================================================================== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--azul-profundo);
+  color: var(--blanco);
+  font-family: var(--fuente-cuerpo);
+  font-size: clamp(1rem, 0.94rem + 0.3vw, 1.125rem);
+  font-weight: 500;
+  line-height: 1.55;
+  overflow-x: hidden;
+}
+
+body.bloquear-scroll {
+  overflow: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  line-height: 1.15;
+  margin: 0;
+  text-wrap: balance;
+  color: var(--blanco);
+}
+
+p {
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ==========================================================================
+   3. UTILIDADES Y LAYOUT COMPARTIDO
+   ========================================================================== */
+.contenedor {
+  width: min(100% - 2.5rem, var(--ancho-maximo));
+  margin-inline: auto;
+}
+
+.oculta {
+  display: none !important;
+}
+
+.seccion {
+  padding-block: var(--espacio-seccion);
+  position: relative;
+  scroll-margin-top: var(--altura-nav);
+}
+
+/* Niveles y áreas se alcanzan con la ruta de aventura (sticky) ya visible,
+   así que además de la nav necesitan compensar esa segunda barra. */
+#niveles,
+#areas {
+  scroll-margin-top: calc(var(--altura-nav) + 64px);
+}
+
+.seccion__encabezado {
+  max-width: 46rem;
+  margin-bottom: clamp(2rem, 4vw, 3.25rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.seccion__superindice {
+  font-family: var(--fuente-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--rojo-luminoso);
+  margin: 0;
+}
+
+.seccion__titulo {
+  font-size: clamp(1.75rem, 1.4rem + 1.6vw, 2.75rem);
+}
+
+.seccion__texto {
+  color: var(--niebla);
+  font-size: clamp(1rem, 0.96rem + 0.2vw, 1.15rem);
+  max-width: 42rem;
+}
+
+.etiqueta-estado {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1.1rem;
+  border-radius: var(--radio-full);
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+  width: fit-content;
+}
+
+.etiqueta-estado--proximamente {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px dashed var(--borde-fuerte);
+  color: var(--niebla);
+}
+
+/* ==========================================================================
+   4. ACCESIBILIDAD
+   ========================================================================== */
+.sr-solo {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.salto-contenido {
+  position: absolute;
+  left: 1rem;
+  top: -100px;
+  background: var(--rojo);
+  color: var(--blanco);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radio-s);
+  z-index: 999;
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  transition: top var(--duracion-r) var(--curva);
+}
+
+.salto-contenido:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 3px solid var(--azul-luminoso);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Revelado progresivo al hacer scroll */
+[data-anim] {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity var(--duracion-l) var(--curva), transform var(--duracion-l) var(--curva);
+  transition-delay: calc(var(--retardo, 0) * 90ms);
+}
+[data-anim].en-vista {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-anim][data-retardo="1"] { --retardo: 1; }
+[data-anim][data-retardo="2"] { --retardo: 2; }
+[data-anim][data-retardo="3"] { --retardo: 3; }
+[data-anim][data-retardo="4"] { --retardo: 4; }
+
+/* ==========================================================================
+   5. BARRA DE NAVEGACIÓN
+   ========================================================================== */
+.barra-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: var(--altura-nav);
+  display: flex;
+  align-items: center;
+  background: rgba(0, 8, 29, 0.82);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--borde);
+}
+
+.barra-nav__interior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.marca {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  flex-shrink: 0;
+}
+
+.marca__escudo {
+  height: clamp(34px, 4vw, 44px);
+  width: auto;
+  filter: drop-shadow(0 2px 10px rgba(0, 0, 0, 0.45));
+}
+
+.marca__escudo--respaldo {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  line-height: 1;
+}
+
+.marca__texto {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  font-size: clamp(1.15rem, 3vw, 1.4rem);
+  letter-spacing: 0.01em;
+}
+
+.marca__acento {
+  color: var(--rojo-luminoso);
+}
+
+.nav-principal__lista {
+  display: flex;
+  align-items: center;
+  gap: clamp(1.25rem, 2vw, 2.25rem);
+}
+
+.nav-principal__enlace {
+  position: relative;
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+  padding: 0.4rem 0.1rem;
+  color: var(--niebla);
+  transition: color var(--duracion-r) ease;
+}
+
+.nav-principal__enlace::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -4px;
+  height: 2px;
+  background: var(--rojo);
+  transition: right var(--duracion-m) var(--curva);
+}
+
+.nav-principal__enlace:hover,
+.nav-principal__enlace--activo {
+  color: var(--blanco);
+}
+
+.nav-principal__enlace:hover::after,
+.nav-principal__enlace--activo::after {
+  right: 0;
+}
+
+.boton-hamburguesa {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 46px;
+  height: 46px;
+  background: transparent;
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-s);
+  flex-shrink: 0;
+}
+
+.boton-hamburguesa__linea {
+  width: 20px;
+  height: 2px;
+  background: var(--blanco);
+  border-radius: var(--radio-full);
+  transition: transform var(--duracion-m) var(--curva), opacity var(--duracion-r) ease;
+}
+
+.boton-hamburguesa--activo .boton-hamburguesa__linea:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+.boton-hamburguesa--activo .boton-hamburguesa__linea:nth-child(2) {
+  opacity: 0;
+}
+.boton-hamburguesa--activo .boton-hamburguesa__linea:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* ==========================================================================
+   6. HERO
+   ========================================================================== */
+.hero {
+  position: relative;
+  min-height: calc(100vh - var(--altura-nav));
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  padding-block: clamp(2rem, 6vh, 4rem);
+}
+
+.hero__fondo {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 60% 55% at 18% 15%, rgba(79, 127, 255, 0.16), transparent 60%),
+    linear-gradient(160deg, var(--azul-profundo) 0%, var(--azul) 62%, #001440 100%);
+}
+
+.hero__rejilla {
+  position: absolute;
+  inset: -10% -10%;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.045) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 60% at 50% 40%, black 30%, transparent 75%);
+}
+
+.hero__resplandor {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.55;
+}
+.hero__resplandor--rojo {
+  width: 30vw;
+  height: 30vw;
+  min-width: 260px;
+  min-height: 260px;
+  background: var(--rojo);
+  right: -6%;
+  top: 8%;
+}
+.hero__resplandor--azul {
+  width: 34vw;
+  height: 34vw;
+  min-width: 300px;
+  min-height: 300px;
+  background: var(--azul-luminoso);
+  left: -8%;
+  bottom: -10%;
+  opacity: 0.35;
+}
+
+.hero__interior {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  align-items: center;
+  gap: clamp(2rem, 5vw, 4rem);
+}
+
+.hero__columna-texto {
+  max-width: 40rem;
+}
+
+.hero__etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--fuente-display);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--niebla);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--borde);
+  padding: 0.5rem 1rem 0.5rem 0.6rem;
+  border-radius: var(--radio-full);
+  margin-bottom: 1.5rem;
+}
+
+.hero__etiqueta-escudo {
+  height: 20px;
+  width: auto;
+  border-radius: 3px;
+}
+
+.hero__titulo {
+  font-size: clamp(2.4rem, 1.8rem + 3.4vw, 4.4rem);
+  letter-spacing: -0.01em;
+}
+
+.hero__subtitulo {
+  font-family: var(--fuente-display);
+  font-size: clamp(1.15rem, 1rem + 0.8vw, 1.5rem);
+  font-weight: 600;
+  color: var(--blanco);
+  margin-top: 1.4rem;
+}
+
+.hero__descripcion {
+  color: var(--niebla);
+  font-size: clamp(1rem, 0.95rem + 0.3vw, 1.2rem);
+  margin-top: 0.6rem;
+}
+
+.hero__acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2.5rem;
+}
+
+.hero__indicador-scroll {
+  position: absolute;
+  bottom: clamp(1rem, 3vh, 2rem);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1;
+  width: 30px;
+  height: 46px;
+  border-radius: var(--radio-full);
+  border: 2px solid var(--borde-fuerte);
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+.hero__indicador-scroll span {
+  width: 4px;
+  height: 8px;
+  border-radius: var(--radio-full);
+  background: var(--blanco);
+  animation: indicador-scroll 1.8s var(--curva) infinite;
+}
+
+/* --- Escena animada del hero --- */
+.hero__columna-escena {
+  position: relative;
+  height: clamp(280px, 42vw, 460px);
+}
+
+.escena-hero {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+
+.escena-hero__aro {
+  position: absolute;
+  inset: 8%;
+  border: 1.5px dashed var(--borde-fuerte);
+  border-radius: 50%;
+  animation: girar-lento 40s linear infinite;
+}
+
+.escena-hero__personaje {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.escena-hero__personaje--flotar {
+  animation: flotar 5s var(--curva) infinite;
+}
+
+.objeto-flotante {
+  position: absolute;
+  font-size: clamp(1.4rem, 3vw, 2.1rem);
+  filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.4));
+  animation: flotar-particula 6s ease-in-out infinite;
+}
+.objeto-flotante--1 { top: 6%;  left: 12%; animation-delay: 0s; }
+.objeto-flotante--2 { top: 18%; right: 8%; animation-delay: 0.6s; }
+.objeto-flotante--3 { bottom: 22%; left: 4%; animation-delay: 1.2s; }
+.objeto-flotante--4 { bottom: 8%;  right: 16%; animation-delay: 1.8s; }
+.objeto-flotante--5 { top: 46%; left: -2%; animation-delay: 2.4s; }
+.objeto-flotante--6 { top: 2%;  right: 30%; animation-delay: 3s; font-size: 1.1rem; }
+.objeto-flotante--7 { bottom: 44%; right: -2%; animation-delay: 3.6s; }
+.objeto-flotante--8 { bottom: 2%; left: 32%; animation-delay: 4.2s; }
+
+.particula {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--azul-luminoso);
+  box-shadow: 0 0 12px 2px var(--azul-luminoso);
+  animation: orbitar 14s linear infinite;
+}
+.particula--1 { top: 20%; left: 50%; animation-duration: 12s; }
+.particula--2 { top: 60%; left: 30%; animation-duration: 18s; background: var(--rojo-luminoso); box-shadow: 0 0 12px 2px var(--rojo-luminoso); }
+.particula--3 { top: 40%; left: 70%; animation-duration: 16s; }
+.particula--4 { top: 75%; left: 60%; animation-duration: 20s; background: var(--rojo-luminoso); box-shadow: 0 0 12px 2px var(--rojo-luminoso); }
+.particula--5 { top: 10%; left: 75%; animation-duration: 15s; }
+
+/* Personaje guía — construido con CSS puro (sin imágenes externas) */
+.personaje-guia {
+  position: relative;
+  width: clamp(96px, 12vw, 150px);
+  height: clamp(96px, 12vw, 150px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.personaje-guia__cuerpo {
+  position: absolute;
+  inset: 0;
+  border-radius: 42% 42% 50% 50% / 46% 46% 54% 54%;
+  background: linear-gradient(155deg, var(--azul-luminoso) 0%, var(--azul) 65%, var(--azul-profundo) 100%);
+  box-shadow: inset 0 -10px 18px rgba(0, 0, 0, 0.35), var(--resplandor-azul);
+}
+
+.personaje-guia__cara {
+  position: relative;
+  display: flex;
+  gap: clamp(10px, 1.6vw, 18px);
+  z-index: 1;
+}
+
+.personaje-guia__ojo {
+  width: clamp(10px, 1.6vw, 16px);
+  height: clamp(14px, 2vw, 20px);
+  background: var(--blanco);
+  border-radius: 50%;
+  animation: parpadeo 5.5s ease-in-out infinite;
+}
+
+.personaje-guia__insignia {
+  position: absolute;
+  bottom: -6%;
+  right: -6%;
+  font-size: clamp(1.4rem, 2.4vw, 2.1rem);
+  background: var(--rojo);
+  border-radius: 50%;
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--resplandor-rojo);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+}
+
+.personaje-guia--grande {
+  width: clamp(150px, 20vw, 230px);
+  height: clamp(150px, 20vw, 230px);
+}
+
+/* Variantes por ciclo: la forma evoluciona levemente para transmitir crecimiento */
+.personaje-guia--ciclo2 .personaje-guia__cuerpo {
+  border-radius: 34% 34% 46% 46% / 40% 40% 60% 60%;
+  background: linear-gradient(155deg, var(--rojo-luminoso) 0%, var(--rojo) 60%, #5c0e19 100%);
+}
+.personaje-guia--ciclo2 .personaje-guia__insignia {
+  background: var(--azul-luminoso);
+  box-shadow: var(--resplandor-azul);
+}
+
+.personaje-guia--ciclo3 .personaje-guia__cuerpo {
+  border-radius: 26% 26% 40% 40% / 34% 34% 66% 66%;
+  background: linear-gradient(155deg, #16308c 0%, var(--azul) 55%, var(--azul-profundo) 100%);
+}
+.personaje-guia--ciclo3 .personaje-guia__cara {
+  gap: clamp(14px, 2vw, 22px);
+}
+
+/* ==========================================================================
+   7. RUTA DE AVENTURA (BREADCRUMB)
+   ========================================================================== */
+.ruta-aventura {
+  position: sticky;
+  top: var(--altura-nav);
+  z-index: 40;
+  max-height: 0;
+  overflow: hidden;
+  background: rgba(0, 8, 29, 0.94);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: max-height var(--duracion-m) var(--curva), border-color var(--duracion-m) ease;
+}
+
+.ruta-aventura--visible {
+  max-height: 70px;
+  border-bottom-color: var(--borde);
+}
+
+.ruta-aventura__interior {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  padding-block: 0.85rem;
+  font-family: var(--fuente-display);
+  font-size: 0.85rem;
+}
+
+.ruta-aventura__paso {
+  background: transparent;
+  border: none;
+  color: var(--niebla);
+  font-weight: 600;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radio-s);
+  transition: color var(--duracion-r) ease, background var(--duracion-r) ease;
+}
+.ruta-aventura__paso:hover {
+  color: var(--blanco);
+  background: rgba(255, 255, 255, 0.06);
+}
+.ruta-aventura__paso--actual {
+  color: var(--blanco);
+  background: var(--rojo);
+  cursor: default;
+}
+.ruta-aventura__paso--actual:hover {
+  background: var(--rojo);
+}
+.ruta-aventura__separador {
+  color: var(--niebla-tenue);
+}
+
+/* ==========================================================================
+   8. SECCIÓN CICLOS
+   ========================================================================== */
+.rejilla-ciclos {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: clamp(1.25rem, 2.5vw, 2rem);
+}
+
+.tarjeta-ciclo {
+  position: relative;
+  background: linear-gradient(160deg, var(--azul-panel) 0%, var(--azul-profundo) 130%);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-l);
+  padding: clamp(1.75rem, 2.5vw, 2.25rem);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  box-shadow: var(--sombra-panel);
+  transition: transform var(--duracion-m) var(--curva), box-shadow var(--duracion-m) var(--curva), border-color var(--duracion-m) ease;
+}
+
+.tarjeta-ciclo:hover {
+  transform: translateY(-6px);
+  border-color: var(--borde-fuerte);
+  box-shadow: var(--sombra-panel), var(--resplandor-azul);
+}
+
+.tarjeta-ciclo.esta-seleccionada {
+  border-color: var(--rojo-luminoso);
+  box-shadow: var(--sombra-panel), var(--resplandor-rojo);
+}
+
+.tarjeta-ciclo__marco {
+  align-self: center;
+  margin-bottom: 0.5rem;
+}
+
+.tarjeta-ciclo__numero {
+  font-family: var(--fuente-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--niebla-tenue);
+}
+
+.tarjeta-ciclo__titulo {
+  font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.6rem);
+}
+
+.tarjeta-ciclo__grados {
+  color: var(--niebla);
+  font-weight: 600;
+}
+
+.tarjeta-ciclo__recompensa {
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--blanco);
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.barra-progreso {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radio-full);
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+  margin-top: 0.75rem;
+}
+.barra-progreso__relleno {
+  display: block;
+  height: 100%;
+  width: var(--progreso, 10%);
+  background: linear-gradient(90deg, var(--rojo), var(--rojo-luminoso));
+  border-radius: inherit;
+}
+
+.tarjeta-ciclo__boton {
+  margin-top: 1.4rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   9. SECCIÓN NIVELES (GRADOS)
+   ========================================================================== */
+.boton-volver {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: transparent;
+  border: 1px solid var(--borde);
+  color: var(--niebla);
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radio-full);
+  margin-bottom: 1rem;
+  transition: color var(--duracion-r) ease, border-color var(--duracion-r) ease, transform var(--duracion-r) var(--curva);
+}
+.boton-volver:hover {
+  color: var(--blanco);
+  border-color: var(--borde-fuerte);
+  transform: translateX(-3px);
+}
+
+.rejilla-niveles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.tarjeta-nivel {
+  position: relative;
+  background: var(--azul-panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-m);
+  padding: 1.5rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  transition: transform var(--duracion-m) var(--curva), border-color var(--duracion-m) ease, box-shadow var(--duracion-m) ease;
+}
+.tarjeta-nivel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(160deg, var(--azul-luminoso), transparent 40%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duracion-m) ease;
+}
+.tarjeta-nivel:hover {
+  transform: translateY(-4px) scale(1.015);
+  box-shadow: var(--resplandor-azul);
+}
+.tarjeta-nivel:hover::before {
+  opacity: 1;
+}
+.tarjeta-nivel.esta-seleccionada {
+  border-color: var(--rojo-luminoso);
+  box-shadow: var(--resplandor-rojo);
+}
+
+.tarjeta-nivel__etiqueta {
+  font-family: var(--fuente-display);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--rojo-luminoso);
+}
+
+.tarjeta-nivel__titulo {
+  font-size: 1.35rem;
+}
+
+.tarjeta-nivel__meta {
+  color: var(--niebla-tenue);
+  font-size: 0.9rem;
+}
+
+.tarjeta-nivel__boton {
+  margin-top: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   10. SECCIÓN ÁREAS + ACORDEÓN DE MISIONES
+   ========================================================================== */
+.lista-areas {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tarjeta-area {
+  background: var(--azul-panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-m);
+  overflow: hidden;
+  transition: border-color var(--duracion-r) ease, box-shadow var(--duracion-r) ease;
+}
+.tarjeta-area:nth-of-type(3n+2) { border-left: 3px solid var(--azul-luminoso); }
+.tarjeta-area:nth-of-type(3n+3) { border-left: 3px solid var(--rojo); }
+.tarjeta-area:nth-of-type(3n+1) { border-left: 3px solid var(--niebla-tenue); }
+
+.tarjeta-area--abierta,
+.tarjeta-area:hover {
+  border-color: var(--borde-fuerte);
+}
+
+.tarjeta-area__cabecera {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem 1.4rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+}
+
+.tarjeta-area__icono {
+  font-size: 1.7rem;
+  flex-shrink: 0;
+  width: 2.4rem;
+  height: 2.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radio-s);
+}
+
+.tarjeta-area__info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  flex-grow: 1;
+}
+
+.tarjeta-area__nombre {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.tarjeta-area__meta {
+  color: var(--niebla-tenue);
+  font-size: 0.85rem;
+}
+
+.tarjeta-area__flecha {
+  font-size: 1.1rem;
+  color: var(--niebla);
+  transition: transform var(--duracion-m) var(--curva);
+  flex-shrink: 0;
+}
+.tarjeta-area__cabecera[aria-expanded="true"] .tarjeta-area__flecha {
+  transform: rotate(180deg);
+}
+
+.tarjeta-area__panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--duracion-m) var(--curva);
+}
+
+.lista-misiones {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--borde);
+}
+
+.mision {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.9rem 1.4rem;
+  border-bottom: 1px solid var(--borde);
+  flex-wrap: wrap;
+}
+.mision:last-child {
+  border-bottom: none;
+}
+
+.mision__numero {
+  font-family: var(--fuente-display);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--niebla-tenue);
+  text-transform: uppercase;
+  min-width: 6.5rem;
+}
+
+.mision__nombre {
+  font-weight: 600;
+  flex-grow: 1;
+}
+
+.mision__estado {
+  font-size: 0.95rem;
+}
+
+.mision--disponible .mision__estado {
+  color: #4ade80;
+}
+
+.mision--bloqueada {
+  opacity: 0.72;
+}
+
+/* ==========================================================================
+   11. BIBLIOTECA VIRTUAL
+   ========================================================================== */
+.panel-biblioteca {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.7fr);
+  align-items: center;
+  gap: 2rem;
+  background: linear-gradient(135deg, var(--azul-panel) 0%, var(--azul-profundo) 100%);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-l);
+  padding: clamp(2rem, 4vw, 3.5rem);
+  overflow: hidden;
+}
+
+.panel-biblioteca__contenido {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.panel-biblioteca__decoracion {
+  position: relative;
+  height: 100%;
+  min-height: 140px;
+}
+
+.panel-biblioteca__libro {
+  position: absolute;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.4));
+  animation: flotar-particula 7s ease-in-out infinite;
+}
+.panel-biblioteca__libro--1 { top: 4%; left: 8%; animation-delay: 0s; }
+.panel-biblioteca__libro--2 { top: 30%; right: 4%; animation-delay: 1s; }
+.panel-biblioteca__libro--3 { bottom: 10%; left: 34%; animation-delay: 2s; }
+.panel-biblioteca__libro--4 { bottom: 32%; right: 30%; animation-delay: 3s; }
+
+/* ==========================================================================
+   12. FOOTER
+   ========================================================================== */
+.pie-pagina {
+  background: var(--azul-profundo);
+  border-top: 1px solid var(--borde);
+  padding-block: 2.5rem;
+}
+
+.pie-pagina__interior {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 0.6rem;
+}
+
+.pie-pagina__marca {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.pie-pagina__escudo {
+  height: 32px;
+  width: auto;
+}
+
+.pie-pagina__nombre {
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.pie-pagina__frase {
+  color: var(--niebla);
+  font-weight: 600;
+}
+
+.pie-pagina__copy {
+  color: var(--niebla-tenue);
+  font-size: 0.85rem;
+}
+
+/* ==========================================================================
+   13. MODAL "PRÓXIMAMENTE"
+   ========================================================================== */
+.modal-fondo {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  background: rgba(0, 4, 15, 0.72);
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  transition: opacity var(--duracion-m) ease;
+}
+
+.modal-fondo[hidden] {
+  display: none;
+}
+
+.modal-fondo--visible {
+  opacity: 1;
+}
+
+.modal {
+  position: relative;
+  width: min(100%, 26rem);
+  background: linear-gradient(160deg, var(--azul-panel-alto) 0%, var(--azul-profundo) 100%);
+  border: 1px solid var(--borde-fuerte);
+  border-radius: var(--radio-l);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  text-align: center;
+  box-shadow: var(--sombra-panel), var(--resplandor-rojo);
+  transform: scale(0.9);
+  transition: transform var(--duracion-m) var(--curva);
+}
+.modal-fondo--visible .modal {
+  transform: scale(1);
+}
+
+.modal__cerrar {
+  position: absolute;
+  top: 0.9rem;
+  right: 0.9rem;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--borde);
+  background: rgba(255, 255, 255, 0.05);
+  font-size: 1.3rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal__cohete {
+  font-size: 2.6rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal__titulo {
+  font-size: 1.4rem;
+  margin-bottom: 0.75rem;
+}
+
+.modal__texto {
+  color: var(--niebla);
+  margin-bottom: 1.5rem;
+}
+
+.modal__boton {
+  width: 100%;
+  justify-content: center;
+}
+
+/* ==========================================================================
+   14. BOTONES
+   ========================================================================== */
+.boton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--fuente-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+  padding: 0.9rem 1.75rem;
+  border-radius: var(--radio-full);
+  border: 1px solid transparent;
+  transition: transform var(--duracion-r) var(--curva), box-shadow var(--duracion-r) ease, background var(--duracion-r) ease, border-color var(--duracion-r) ease;
+  min-height: 48px;
+}
+
+.boton:hover {
+  transform: translateY(-2px);
+}
+.boton:active {
+  transform: translateY(0);
+}
+
+.boton--primario {
+  background: linear-gradient(135deg, var(--rojo-luminoso), var(--rojo));
+  color: var(--blanco);
+  box-shadow: 0 10px 24px -8px rgba(175, 27, 46, 0.55);
+}
+.boton--primario:hover {
+  box-shadow: 0 14px 30px -8px rgba(226, 73, 95, 0.65);
+}
+
+.boton--secundario {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--borde-fuerte);
+  color: var(--blanco);
+}
+.boton--secundario:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.boton--fantasma {
+  background: transparent;
+  border-color: var(--borde-fuerte);
+  color: var(--blanco);
+}
+.boton--fantasma:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.boton--mision {
+  margin-left: auto;
+  padding: 0.55rem 1.2rem;
+  min-height: 40px;
+  font-size: 0.82rem;
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--borde);
+}
+.mision--disponible .boton--mision {
+  background: linear-gradient(135deg, var(--rojo-luminoso), var(--rojo));
+  border-color: transparent;
+}
+.mision--bloqueada .boton--mision {
+  color: var(--niebla-tenue);
+}
+
+/* ==========================================================================
+   15. ANIMACIONES
+   ========================================================================== */
+@keyframes flotar {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1.2deg); }
+}
+
+@keyframes flotar-particula {
+  0%, 100% { transform: translateY(0) translateX(0) rotate(0deg); }
+  50% { transform: translateY(-16px) translateX(6px) rotate(6deg); }
+}
+
+@keyframes orbitar {
+  from { transform: rotate(0deg) translateX(clamp(70px, 12vw, 160px)) rotate(0deg); }
+  to   { transform: rotate(360deg) translateX(clamp(70px, 12vw, 160px)) rotate(-360deg); }
+}
+
+@keyframes girar-lento {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes parpadeo {
+  0%, 92%, 100% { transform: scaleY(1); }
+  96% { transform: scaleY(0.15); }
+}
+
+@keyframes indicador-scroll {
+  0% { transform: translateY(0); opacity: 1; }
+  70% { opacity: 0.4; }
+  100% { transform: translateY(14px); opacity: 0; }
+}
+
+/* ==========================================================================
+   16. MEDIA QUERIES DE RESPONSIVE
+   ========================================================================== */
+
+/* Tablet / notebook */
+@media (max-width: 960px) {
+  .hero__interior {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .hero__columna-texto {
+    max-width: none;
+    margin-inline: auto;
+  }
+  .hero__etiqueta {
+    margin-inline: auto;
+  }
+  .hero__acciones {
+    justify-content: center;
+  }
+  .hero__columna-escena {
+    height: clamp(220px, 60vw, 340px);
+    order: -1;
+  }
+  .panel-biblioteca {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  .panel-biblioteca__contenido {
+    align-items: center;
+  }
+  .panel-biblioteca__decoracion {
+    min-height: 100px;
+  }
+}
+
+/* Celular */
+@media (max-width: 720px) {
+  .nav-principal {
+    position: fixed;
+    top: var(--altura-nav);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: calc(100vh - var(--altura-nav));
+    height: calc(100dvh - var(--altura-nav));
+    background: var(--azul-profundo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translateX(100%);
+    transition: transform var(--duracion-m) var(--curva);
+  }
+  .nav-principal--abierto {
+    transform: translateX(0);
+  }
+  .nav-principal__lista {
+    flex-direction: column;
+    gap: 2.2rem;
+  }
+  .nav-principal__enlace {
+    font-size: 1.4rem;
+  }
+  .boton-hamburguesa {
+    display: flex;
+  }
+
+  .hero__acciones {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .hero__acciones .boton {
+    justify-content: center;
+  }
+
+  .rejilla-ciclos,
+  .rejilla-niveles {
+    grid-template-columns: 1fr;
+  }
+
+  .ruta-aventura__interior {
+    font-size: 0.78rem;
+  }
+
+  .mision {
+    gap: 0.5rem;
+  }
+  .boton--mision {
+    margin-left: 0;
+    width: 100%;
+    justify-content: center;
+    order: 4;
+  }
+  .mision__numero {
+    min-width: auto;
+  }
+}
