@@ -25,19 +25,6 @@ eduicei/
 
 Los tres archivos deben mantenerse juntos y con esos nombres exactos, ya que `index.html` los referencia por ruta relativa (`style.css`, `script.js`, `assets/escudo-icei.png`).
 
-## Cómo verlo en tu computadora
-
-No necesita instalación ni servidor: alcanza con abrir `index.html` con doble clic en cualquier navegador moderno (Chrome, Edge, el navegador de Chromebook).
-
-## Cómo publicarlo en GitHub Pages
-
-1. Creá un repositorio nuevo en GitHub (puede ser público o privado, según tu plan).
-2. Subí los cuatro elementos de la carpeta `eduicei/` (`index.html`, `style.css`, `script.js` y la carpeta `assets/`) a la raíz del repositorio.
-3. En el repositorio, andá a **Settings → Pages**.
-4. En "Source", elegí la rama principal (`main`) y la carpeta `/ (root)`.
-5. Guardá. GitHub va a darte una URL del tipo `https://tu-usuario.github.io/tu-repositorio/`. Puede tardar uno o dos minutos en estar disponible.
-
-No hace falta ningún paso de build ni instalar dependencias: al ser HTML/CSS/JS puro, GitHub Pages lo sirve directamente.
 
 ## Cómo agregar una nueva actividad
 
