@@ -40,18 +40,8 @@
        una pestaña nueva.
      - Cuando "estado" es "proximamente", la URL puede dejarse vacía. La
        misión se mostrará bloqueada con el texto "PRÓXIMAMENTE".
-     
-    =>>> PLANTILLA -->reemplazar parametros en obtenerArea (ciclo, grado, area), indice 
-                        nombre:
-                        estado: "disponible"
-                        url:
-Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
-
-    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 1, {
-    nombre: "Alfabetización",
-    estado: "disponible",
-    url: "https://material-icei.github.io/alfabetizacion2/"
-  });
+     - No se necesita tocar ningún otro archivo ni ninguna otra parte del
+       código para agregar o modificar actividades.
      ========================================================================== */
 
   // Plantilla reutilizable: genera N actividades "próximamente" para un área.
@@ -175,17 +165,32 @@ Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
      obtenerArea("<id del ciclo>", "<nombre del grado>", "<nombre del área>")
      y el índice (0 = Actividad 1, 1 = Actividad 2, etc.).
      -------------------------------------------------------------------------- */
+
+//  ==>>>  ciclo-1
+//     ==>> 1.º Grado
   configurarActividad(obtenerArea("ciclo-1", "1.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
     estado: "disponible",
     url: "https://material-icei.github.io/alfabetizacion1/"
   });
-
+   
+//     ==>> 2.º Grado
   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
     estado: "disponible",
     url: "https://material-icei.github.io/alfabetizacion2/"
   });
+
+  /* --------------------------------------------------------------------------
+     RECURSOS DE LA BIBLIOTECA VIRTUAL
+     Cada recurso se muestra como un botón que abre su URL en una pestaña
+     nueva. Para agregar uno nuevo, sumá un objeto más a este array con el
+     mismo formato (nombre, grado y url).
+     -------------------------------------------------------------------------- */
+  const RECURSOS_BIBLIOTECA = [
+    { nombre: "Biblioteca mágica", grado: "1.º Grado", url: "https://material-icei.github.io/cuentosparaprimero/" },
+    { nombre: "Cuentos que brillan", grado: "2.º Grado", url: "https://material-icei.github.io/cuentosparasegundo/" }
+  ];
 
   /* ==========================================================================
      2. UTILIDADES GENERALES
@@ -251,6 +256,8 @@ Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
     modal: document.getElementById("modal-proximamente"),
     modalCerrar: document.getElementById("modal-cerrar"),
     modalVolver: document.getElementById("modal-volver"),
+
+    bibliotecaRecursos: document.getElementById("biblioteca-recursos"),
 
     anioActual: document.getElementById("anio-actual")
   };
@@ -487,6 +494,27 @@ Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
     }, 350);
   }
 
+  // Genera los botones de la Biblioteca Virtual a partir de RECURSOS_BIBLIOTECA.
+  function renderBibliotecaRecursos() {
+    if (!dom.bibliotecaRecursos) return;
+    dom.bibliotecaRecursos.innerHTML = "";
+
+    RECURSOS_BIBLIOTECA.forEach(function (recurso) {
+      const enlace = crearElemento("a", {
+        clase: "boton boton--secundario",
+        atributos: {
+          href: recurso.url,
+          target: "_blank",
+          rel: "noopener noreferrer"
+        }
+      });
+      enlace.innerHTML =
+        '<span aria-hidden="true">📚</span> ' + recurso.nombre +
+        ' <span class="biblioteca__recurso-grado">· ' + recurso.grado + "</span>";
+      dom.bibliotecaRecursos.appendChild(enlace);
+    });
+  }
+
   function mostrarSeccion(seccion) {
     seccion.classList.remove("oculta");
   }
@@ -715,6 +743,7 @@ Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
   function init() {
     dom.anioActual.textContent = new Date().getFullYear();
     renderCiclos();
+    renderBibliotecaRecursos();
     initNavActivo();
     initRevelarAlScroll();
     revelarNuevosElementos(dom.rejillaCiclos);
