@@ -40,8 +40,18 @@
        una pestaña nueva.
      - Cuando "estado" es "proximamente", la URL puede dejarse vacía. La
        misión se mostrará bloqueada con el texto "PRÓXIMAMENTE".
-     - No se necesita tocar ningún otro archivo ni ninguna otra parte del
-       código para agregar o modificar actividades.
+     
+    =>>> PLANTILLA -->reemplazar parametros en obtenerArea (ciclo, grado, area), indice 
+                        nombre:
+                        estado: "disponible"
+                        url:
+Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
+
+    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 1, {
+    nombre: "Alfabetización",
+    estado: "disponible",
+    url: "https://material-icei.github.io/alfabetizacion2/"
+  });
      ========================================================================== */
 
   // Plantilla reutilizable: genera N actividades "próximamente" para un área.
@@ -141,6 +151,41 @@
       }
     ]
   };
+
+  // --------------------------------------------------------------------------
+  // Utilidades para cargar actividades reales sin tocar el resto del código.
+  // --------------------------------------------------------------------------
+
+  // Busca un área puntual dentro de la plataforma por ciclo → grado → área.
+  function obtenerArea(idCiclo, nombreGrado, nombreArea) {
+    const ciclo = plataforma.ciclos.find(function (c) { return c.id === idCiclo; });
+    const grado = ciclo && ciclo.grados.find(function (g) { return g.nombre === nombreGrado; });
+    return grado && grado.areas.find(function (a) { return a.nombre === nombreArea; });
+  }
+
+  // Completa una actividad ya existente (por posición) con sus datos reales.
+  function configurarActividad(area, indice, datos) {
+    if (!area || !area.actividades[indice]) return;
+    Object.assign(area.actividades[indice], datos);
+  }
+
+  /* --------------------------------------------------------------------------
+     ACTIVIDADES REALES CARGADAS
+     Para agregar una nueva, sumá una línea siguiendo este mismo formato:
+     obtenerArea("<id del ciclo>", "<nombre del grado>", "<nombre del área>")
+     y el índice (0 = Actividad 1, 1 = Actividad 2, etc.).
+     -------------------------------------------------------------------------- */
+  configurarActividad(obtenerArea("ciclo-1", "1.º Grado", "Lengua"), 0, {
+    nombre: "Alfabetización",
+    estado: "disponible",
+    url: "https://material-icei.github.io/alfabetizacion1/"
+  });
+
+  configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 1, {
+    nombre: "Alfabetización",
+    estado: "disponible",
+    url: "https://material-icei.github.io/alfabetizacion2/"
+  });
 
   /* ==========================================================================
      2. UTILIDADES GENERALES
