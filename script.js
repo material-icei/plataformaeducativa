@@ -181,7 +181,7 @@ Ejemplo (pegar en ACTIVIDADES REALES CARGADAS)
     url: "https://material-icei.github.io/alfabetizacion1/"
   });
 
-  configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 1, {
+  configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
     estado: "disponible",
     url: "https://material-icei.github.io/alfabetizacion2/"
