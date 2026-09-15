@@ -184,7 +184,7 @@
     configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 0, {
     nombre: "Resta con dificultad",
     estado: "disponible",
-    url: "https://material-icei.github.io/matematica2/"
+    url: "https://material-icei.github.io/matematica2/resta con dificultad/index.html"
   });
 
   /* --------------------------------------------------------------------------
