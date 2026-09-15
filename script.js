@@ -181,6 +181,12 @@
     url: "https://material-icei.github.io/alfabetizacion2/"
   });
 
+    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 0, {
+    nombre: "Resta con dificultad",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/"
+  });
+
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
      Cada recurso se muestra como un botón que abre su URL en una pestaña
