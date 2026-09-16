@@ -28,7 +28,17 @@
     <nav class="nav-principal" id="nav-principal" aria-label="Navegación principal">
       <ul class="nav-principal__lista">
         <li><a href="#inicio" class="nav-principal__enlace" data-nav-link data-destino="inicio">Inicio</a></li>
-        <li><a href="#ciclos" class="nav-principal__enlace" data-nav-link data-destino="ciclos">Ciclos</a></li>
+
+        <li class="nav-desplegable">
+          <button type="button" class="nav-principal__enlace nav-desplegable__disparador" id="grados-disparador"
+                  aria-haspopup="true" aria-expanded="false" aria-controls="grados-menu">
+            Grados <span class="nav-desplegable__flecha" aria-hidden="true">▾</span>
+          </button>
+          <ul class="nav-desplegable__menu" id="grados-menu" role="menu" aria-label="Elegir grado">
+            <!-- Ítems (1.º a 7.º Grado) generados dinámicamente por script.js -->
+          </ul>
+        </li>
+
         <li><a href="#biblioteca" class="nav-principal__enlace" data-nav-link data-destino="biblioteca">Biblioteca Virtual</a></li>
       </ul>
     </nav>
@@ -145,7 +155,7 @@
         <button class="boton-volver" type="button" id="volver-a-ciclos">
           <span aria-hidden="true">←</span> Elegí tu aventura
         </button>
-        <p class="seccion__superindice">Paso 2 de 3</p>
+        <p class="seccion__superindice" id="niveles-superindice">Paso 2 de 3</p>
         <h2 class="seccion__titulo" id="titulo-niveles">Elegí tu nivel</h2>
         <p class="seccion__texto" id="niveles-descripcion"></p>
       </header>
@@ -237,3 +247,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
