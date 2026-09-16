@@ -188,7 +188,7 @@
   });
 
    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 1, {
-    nombre: "Resta con dificultad",
+    nombre: "Sumas con números de 3 cifras",
     estado: "disponible",
     url: "https://material-icei.github.io/matematica2/suma-3-cifras/"
   });
