@@ -165,16 +165,15 @@
      obtenerArea("<id del ciclo>", "<nombre del grado>", "<nombre del área>")
      y el índice (0 = Actividad 1, 1 = Actividad 2, etc.).
      -------------------------------------------------------------------------- */
-
-//  ==>>>  ciclo-1
-//     ==>> 1.º Grado
+////////  ==>>>  ciclo-1
+////     ==>> 1.º Grado
   configurarActividad(obtenerArea("ciclo-1", "1.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
     estado: "disponible",
     url: "https://material-icei.github.io/alfabetizacion1/"
   });
    
-//     ==>> 2.º Grado
+////     ==>> 2.º Grado
   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
     estado: "disponible",
@@ -259,6 +258,9 @@
     rejillaNiveles: document.getElementById("rejilla-niveles"),
     volverACiclos: document.getElementById("volver-a-ciclos"),
 
+    gradosDisparador: document.getElementById("grados-disparador"),
+    gradosMenu: document.getElementById("grados-menu"),
+
     seccionAreas: document.getElementById("areas"),
     areasDescripcion: document.getElementById("areas-descripcion"),
     listaAreas: document.getElementById("lista-areas"),
@@ -295,7 +297,7 @@
     plataforma.ciclos.forEach(function (ciclo) {
       const tarjeta = crearElemento("article", {
         clase: "tarjeta-ciclo tarjeta-ciclo--" + ciclo.personaje,
-        atributos: { role: "listitem", "data-anim": "subir" }
+        atributos: { role: "listitem", "data-anim": "subir", "data-id": ciclo.id }
       });
 
       tarjeta.innerHTML =
@@ -326,7 +328,7 @@
     estado.grado = null;
     estado.areaAbiertaId = null;
 
-    marcarSeleccionActiva(dom.rejillaCiclos, ".tarjeta-ciclo", ciclo.id, plataforma.ciclos);
+    marcarSeleccionActiva(dom.rejillaCiclos, ".tarjeta-ciclo", ciclo.id);
 
     renderNiveles(ciclo);
     ocultarSeccion(dom.seccionAreas);
@@ -335,12 +337,11 @@
     desplazarA(dom.seccionNiveles);
   }
 
-  function marcarSeleccionActiva(contenedor, selector, idActivo, listaOriginal) {
-    const tarjetas = contenedor.querySelectorAll(selector);
-    tarjetas.forEach(function (tarjeta, indice) {
-      const item = listaOriginal[indice];
-      const activa = item && item.id === idActivo;
-      tarjeta.classList.toggle("esta-seleccionada", !!activa);
+  // Compara por "data-id" en vez de por posición: más robusto ante listas que
+  // se regeneran en cualquier orden.
+  function marcarSeleccionActiva(contenedor, selector, idActivo) {
+    contenedor.querySelectorAll(selector).forEach(function (tarjeta) {
+      tarjeta.classList.toggle("esta-seleccionada", tarjeta.dataset.id === idActivo);
     });
   }
 
@@ -355,7 +356,7 @@
 
       const tarjeta = crearElemento("article", {
         clase: "tarjeta-nivel",
-        atributos: { role: "listitem", "data-anim": "subir" }
+        atributos: { role: "listitem", "data-anim": "subir", "data-id": grado.id }
       });
 
       tarjeta.innerHTML =
@@ -373,15 +374,26 @@
   }
 
   function seleccionarGrado(ciclo, grado) {
+    estado.ciclo = ciclo;
     estado.grado = grado;
     estado.areaAbiertaId = null;
 
-    marcarSeleccionActiva(dom.rejillaNiveles, ".tarjeta-nivel", grado.id, ciclo.grados);
+    marcarSeleccionActiva(dom.rejillaNiveles, ".tarjeta-nivel", grado.id);
 
     renderAreas(ciclo, grado);
     mostrarSeccion(dom.seccionAreas);
     actualizarRutaAventura();
     desplazarA(dom.seccionAreas);
+  }
+
+  // Entrada directa desde el desplegable "Grados" del nav: arma el contexto
+  // del ciclo correspondiente (para que "← Elegí tu nivel" funcione bien) y
+  // salta directo a las áreas del grado elegido, sin detenerse en Niveles.
+  function irDirectoAGrado(ciclo, grado) {
+    marcarSeleccionActiva(dom.rejillaCiclos, ".tarjeta-ciclo", ciclo.id);
+    renderNiveles(ciclo);
+    mostrarSeccion(dom.seccionNiveles);
+    seleccionarGrado(ciclo, grado);
   }
 
   function renderAreas(ciclo, grado) {
@@ -662,7 +674,16 @@
     const destino = document.getElementById(idDestino);
     if (!destino) return;
     alternarMenuMovil(true);
+    marcarNavActivo(idDestino);
     desplazarA(destino);
+  }
+
+  // Resalta en el nav el link cuyo data-destino coincide (se usa tanto al
+  // hacer clic como al detectar con qué sección coincide el scroll).
+  function marcarNavActivo(destino) {
+    dom.enlacesNav.forEach(function (enlace) {
+      enlace.classList.toggle("nav-principal__enlace--activo", enlace.getAttribute("data-destino") === destino);
+    });
   }
 
   dom.enlacesNav.forEach(function (enlace) {
@@ -679,7 +700,7 @@
   });
 
   function initNavActivo() {
-    const secciones = ["inicio", "ciclos", "biblioteca"]
+    const secciones = ["inicio", "biblioteca"]
       .map(function (id) { return document.getElementById(id); })
       .filter(Boolean);
 
@@ -688,15 +709,75 @@
     const observador = new IntersectionObserver(function (entradas) {
       entradas.forEach(function (entrada) {
         if (!entrada.isIntersecting) return;
-        dom.enlacesNav.forEach(function (enlace) {
-          const activo = enlace.getAttribute("data-destino") === entrada.target.id;
-          enlace.classList.toggle("nav-principal__enlace--activo", activo);
-        });
+        marcarNavActivo(entrada.target.id);
       });
     }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
 
     secciones.forEach(function (seccion) { observador.observe(seccion); });
   }
+
+  /* --------------------------------------------------------------------------
+     DESPLEGABLE "GRADOS" (barra de navegación)
+     Lista los 7 grados (1.º a 7.º) generados a partir de la plataforma; al
+     elegir uno, salta directo a sus áreas.
+     -------------------------------------------------------------------------- */
+
+  function renderMenuGrados() {
+    dom.gradosMenu.innerHTML = "";
+
+    plataforma.ciclos.forEach(function (ciclo) {
+      ciclo.grados.forEach(function (grado) {
+        const item = crearElemento("li", { atributos: { role: "none" } });
+        const boton = crearElemento("button", {
+          clase: "nav-desplegable__item",
+          atributos: { type: "button", role: "menuitem" }
+        });
+        boton.innerHTML =
+          grado.nombre + ' <span class="nav-desplegable__item-ciclo">' + ciclo.nombre + "</span>";
+
+        boton.addEventListener("click", function () {
+          cerrarMenuGrados();
+          alternarMenuMovil(true);
+          irDirectoAGrado(ciclo, grado);
+        });
+
+        item.appendChild(boton);
+        dom.gradosMenu.appendChild(item);
+      });
+    });
+  }
+
+  function menuGradosEstaAbierto() {
+    return dom.gradosDisparador.getAttribute("aria-expanded") === "true";
+  }
+
+  function abrirMenuGrados() {
+    dom.gradosDisparador.setAttribute("aria-expanded", "true");
+    dom.gradosMenu.classList.add("nav-desplegable__menu--abierto");
+  }
+
+  function cerrarMenuGrados(devolverFoco) {
+    if (!menuGradosEstaAbierto()) return;
+    dom.gradosDisparador.setAttribute("aria-expanded", "false");
+    dom.gradosMenu.classList.remove("nav-desplegable__menu--abierto");
+    if (devolverFoco) dom.gradosDisparador.focus();
+  }
+
+  dom.gradosDisparador.addEventListener("click", function () {
+    if (menuGradosEstaAbierto()) {
+      cerrarMenuGrados();
+    } else {
+      abrirMenuGrados();
+    }
+  });
+
+  // Cerrar al hacer clic afuera, o con ESC (devolviendo el foco al disparador).
+  document.addEventListener("click", function (evento) {
+    if (!evento.target.closest(".nav-desplegable")) cerrarMenuGrados();
+  });
+  document.addEventListener("keydown", function (evento) {
+    if (evento.key === "Escape" && menuGradosEstaAbierto()) cerrarMenuGrados(true);
+  });
 
   /* ==========================================================================
      9. ANIMACIONES DE ENTRADA AL HACER SCROLL
@@ -756,6 +837,7 @@
     dom.anioActual.textContent = new Date().getFullYear();
     renderCiclos();
     renderBibliotecaRecursos();
+    renderMenuGrados();
     initNavActivo();
     initRevelarAlScroll();
     revelarNuevosElementos(dom.rejillaCiclos);
