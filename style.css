@@ -400,6 +400,87 @@ a {
   transform: translateY(-7px) rotate(-45deg);
 }
 
+/* --- Desplegable "Grados" dentro del nav --- */
+.nav-desplegable {
+  position: relative;
+}
+
+.nav-desplegable__disparador {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: none;
+  padding: 0.4rem 0.1rem;
+}
+
+.nav-desplegable__flecha {
+  font-size: 0.65em;
+  transition: transform var(--duracion-r) var(--curva);
+}
+.nav-desplegable__disparador[aria-expanded="true"] .nav-desplegable__flecha {
+  transform: rotate(180deg);
+}
+.nav-desplegable__disparador[aria-expanded="true"]::after {
+  right: 0;
+}
+
+.nav-desplegable__menu {
+  position: absolute;
+  top: calc(100% + 16px);
+  left: 50%;
+  min-width: 200px;
+  background: var(--azul-panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-m);
+  box-shadow: var(--sombra-panel), var(--resplandor-azul);
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  z-index: 60;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -8px);
+  transition: opacity var(--duracion-r) ease, transform var(--duracion-r) var(--curva), visibility 0s linear var(--duracion-r);
+}
+.nav-desplegable__menu--abierto {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+  transition: opacity var(--duracion-r) ease, transform var(--duracion-r) var(--curva), visibility 0s linear 0s;
+}
+
+.nav-desplegable__item {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--radio-s);
+  padding: 0.6rem 0.85rem;
+  text-align: left;
+  font-family: var(--fuente-display);
+  font-weight: 600;
+  font-size: 0.92rem;
+  color: var(--blanco);
+  transition: background var(--duracion-r) ease;
+}
+.nav-desplegable__item:hover,
+.nav-desplegable__item:focus-visible {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nav-desplegable__item-ciclo {
+  font-family: var(--fuente-cuerpo);
+  font-weight: 600;
+  font-size: 0.75rem;
+  color: var(--niebla-tenue);
+  white-space: nowrap;
+}
+
 /* ==========================================================================
    6. HERO
    ========================================================================== */
@@ -1084,6 +1165,25 @@ a {
 .panel-biblioteca__libro--3 { bottom: 10%; left: 34%; animation-delay: 2s; }
 .panel-biblioteca__libro--4 { bottom: 32%; right: 30%; animation-delay: 3s; }
 
+.biblioteca__recursos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  margin-top: 0.4rem;
+}
+
+.biblioteca__recurso-grado {
+  color: var(--niebla);
+  font-weight: 600;
+  opacity: 0.85;
+}
+
+.biblioteca__nota {
+  color: var(--niebla-tenue);
+  font-size: 0.88rem;
+  margin-top: 0.2rem;
+}
+
 /* ==========================================================================
    12. FOOTER
    ========================================================================== */
@@ -1372,6 +1472,46 @@ a {
   }
   .boton-hamburguesa {
     display: flex;
+  }
+
+  /* El desplegable de "Grados" pasa de panel flotante a acordeón en línea,
+     igual que el resto del menú móvil a pantalla completa. */
+  .nav-desplegable {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .nav-desplegable__menu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    min-width: 0;
+    width: min(300px, 86vw);
+    max-height: 0;
+    overflow: hidden;
+    margin-top: 0;
+    padding: 0;
+    border: none;
+    box-shadow: none;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: var(--radio-m);
+    transition: max-height var(--duracion-m) var(--curva), margin-top var(--duracion-m) var(--curva), padding var(--duracion-m) var(--curva);
+  }
+  .nav-desplegable__menu--abierto {
+    max-height: 480px;
+    margin-top: 1rem;
+    padding: 0.5rem;
+    border: 1px solid var(--borde);
+  }
+  .nav-desplegable__item {
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 1.05rem;
+  }
+  .nav-desplegable__item-ciclo {
+    font-size: 0.7rem;
   }
 
   .hero__acciones {
