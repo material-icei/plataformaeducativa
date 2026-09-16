@@ -187,6 +187,12 @@
     url: "https://material-icei.github.io/matematica2/resta-con-dificultad/"
   });
 
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 1, {
+    nombre: "Resta con dificultad",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/suma-3-cifras/"
+  });
+
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
      Cada recurso se muestra como un botón que abre su URL en una pestaña
