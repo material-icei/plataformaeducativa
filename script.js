@@ -192,6 +192,14 @@
     url: "https://material-icei.github.io/matematica2/suma-3-cifras/"
   });
 
+////////  ==>>>  ciclo-2
+////     ==>> 4.º Grado
+  configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 0, {
+    nombre: "División",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica4/división/"
+  });
+
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
      Cada recurso se muestra como un botón que abre su URL en una pestaña
