@@ -197,7 +197,7 @@
   configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 0, {
     nombre: "División",
     estado: "disponible",
-    url: "https://material-icei.github.io/matematica4/división/"
+    url: "https://material-icei.github.io/matematica4/division/"
   });
 
   /* --------------------------------------------------------------------------
