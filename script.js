@@ -192,6 +192,12 @@
     url: "https://material-icei.github.io/matematica2/suma-3-cifras/"
   });
 
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 2, {
+    nombre: "Cuerpos geométricos - maquetas 3D",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/cuerpos-geometricos/"
+  });
+
 ////////  ==>>>  ciclo-2
 ////     ==>> 4.º Grado
   configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 0, {
