@@ -198,6 +198,7 @@
     url: "https://material-icei.github.io/matematica2/cuerpos-geometricos/"
   });
 
+   
 ////////  ==>>>  ciclo-2
 ////     ==>> 4.º Grado
   configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 0, {
@@ -348,7 +349,7 @@
     ocultarSeccion(dom.seccionAreas);
     mostrarSeccion(dom.seccionNiveles);
     actualizarRutaAventura();
-    desplazarA(dom.seccionNiveles);
+    desplazarA(dom.seccionNiveles, dom.rejillaNiveles);
   }
 
   // Compara por "data-id" en vez de por posición: más robusto ante listas que
@@ -397,7 +398,7 @@
     renderAreas(ciclo, grado);
     mostrarSeccion(dom.seccionAreas);
     actualizarRutaAventura();
-    desplazarA(dom.seccionAreas);
+    desplazarA(dom.seccionAreas, dom.listaAreas);
   }
 
   // Entrada directa desde el desplegable "Grados" del nav: arma el contexto
@@ -560,11 +561,75 @@
     seccion.classList.add("oculta");
   }
 
-  function desplazarA(elemento) {
+  // Alto combinado de las barras fijas (nav + ruta de aventura, si está
+  // visible) en este momento: se usa para calcular cuánto espacio real
+  // queda disponible en la pantalla al saltar a una sección.
+  function alturaBarrasFijas() {
+    const alturaNav = dom.barraNav ? dom.barraNav.getBoundingClientRect().height : 0;
+    const rutaVisible = dom.rutaAventura && dom.rutaAventura.classList.contains("ruta-aventura--visible");
+    const alturaRuta = rutaVisible ? dom.rutaAventura.scrollHeight : 0;
+    return alturaNav + alturaRuta;
+  }
+
+  // Desplaza la ventana hasta "elemento" (una sección). Si se indica
+  // "contenedorTarjetas" (la rejilla de tarjetas de esa sección), en vez de
+  // usar siempre el borde superior de la sección como destino, calcula la
+  // posición que garantiza ver TODAS las tarjetas completas (con sus
+  // botones) dentro de la pantalla, centrándolas cuando sobra espacio.
+  function desplazarA(elemento, contenedorTarjetas) {
     const comportamiento = prefiereMovimientoReducido() ? "auto" : "smooth";
     window.setTimeout(function () {
-      elemento.scrollIntoView({ behavior: comportamiento, block: "start" });
+      if (contenedorTarjetas) {
+        desplazarMostrandoTarjetasCompletas(elemento, contenedorTarjetas, comportamiento);
+      } else {
+        elemento.scrollIntoView({ behavior: comportamiento, block: "start" });
+      }
     }, 30);
+  }
+
+  function desplazarMostrandoTarjetasCompletas(seccion, contenedorTarjetas, comportamiento) {
+    const alturaFija = alturaBarrasFijas();
+    const alturaDisponible = window.innerHeight - alturaFija;
+
+    const rectSeccion = seccion.getBoundingClientRect();
+    const rectRejilla = contenedorTarjetas.getBoundingClientRect();
+
+    const topSeccion = rectSeccion.top + window.scrollY;
+    const topRejilla = rectRejilla.top + window.scrollY;
+    const altoRejilla = rectRejilla.height;
+    const altoContenido = (topRejilla + altoRejilla) - topSeccion; // encabezado + tarjetas
+
+    let destinoScroll;
+
+    if (altoContenido <= alturaDisponible) {
+      // Entra todo (encabezado + tarjetas): comportamiento habitual, el
+      // inicio de la sección queda justo debajo de las barras fijas.
+      destinoScroll = topSeccion - alturaFija;
+    } else if (altoRejilla <= alturaDisponible) {
+      // El encabezado completo no entra, pero todas las tarjetas sí:
+      // centramos la rejilla en el espacio visible para que ningún botón
+      // quede cortado por el borde de la pantalla.
+      const espacioLibre = alturaDisponible - altoRejilla;
+      destinoScroll = topRejilla - alturaFija - espacioLibre / 2;
+    } else {
+      // Ni siquiera las tarjetas entran completas (pantallas muy bajas):
+      // priorizamos ver el inicio de la rejilla.
+      destinoScroll = topRejilla - alturaFija;
+    }
+
+    // Nunca desplazar más arriba del inicio natural de la sección.
+    destinoScroll = Math.max(destinoScroll, topSeccion - alturaFija, 0);
+
+    window.scrollTo({ top: destinoScroll, behavior: comportamiento });
+  }
+
+  // Devuelve la rejilla de tarjetas asociada a una sección de navegación,
+  // para que desplazarA() pueda ajustar el scroll y mostrarla completa.
+  function obtenerRejillaDeSeccion(idSeccion) {
+    if (idSeccion === "ciclos") return dom.rejillaCiclos;
+    if (idSeccion === "niveles") return dom.rejillaNiveles;
+    if (idSeccion === "areas") return dom.listaAreas;
+    return null;
   }
 
   /* ==========================================================================
@@ -622,14 +687,14 @@
     ocultarSeccion(dom.seccionAreas);
     estado.grado = null;
     actualizarRutaAventura();
-    desplazarA(document.getElementById("ciclos"));
+    desplazarA(document.getElementById("ciclos"), dom.rejillaCiclos);
   });
 
   dom.volverANiveles.addEventListener("click", function () {
     ocultarSeccion(dom.seccionAreas);
     estado.grado = null;
     actualizarRutaAventura();
-    desplazarA(dom.seccionNiveles);
+    desplazarA(dom.seccionNiveles, dom.rejillaNiveles);
   });
 
   /* ==========================================================================
@@ -689,7 +754,7 @@
     if (!destino) return;
     alternarMenuMovil(true);
     marcarNavActivo(idDestino);
-    desplazarA(destino);
+    desplazarA(destino, obtenerRejillaDeSeccion(idDestino));
   }
 
   // Resalta en el nav el link cuyo data-destino coincide (se usa tanto al
