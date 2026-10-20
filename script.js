@@ -172,7 +172,7 @@
     estado: "disponible",
     url: "https://material-icei.github.io/alfabetizacion1/"
   });
-   
+
 ////     ==>> 2.º Grado
   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Lengua"), 0, {
     nombre: "Alfabetización",
@@ -198,6 +198,14 @@
     url: "https://material-icei.github.io/matematica2/cuerpos-geometricos/"
   });
 
+  // Matemática 2.º Grado ya usa 4 misiones (el área nace con solo 3 vía
+  // crearMisiones(3)): hay que agregar manualmente el 4to casillero antes
+  // de poder configurarlo, si no configurarActividad() no tiene dónde
+  // escribir y no hace nada.
+  obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
+    nombre: "Actividad 4", estado: "proximamente", url: ""
+  });
+
    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
     nombre: "Vamos de compras - billetes y monedas",
     estado: "disponible",
@@ -206,7 +214,7 @@
 
 
 
-   
+
 ////////  ==>>>  ciclo-2
 ////     ==>> 4.º Grado
   configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 0, {
