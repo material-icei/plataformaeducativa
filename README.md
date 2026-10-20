@@ -53,13 +53,29 @@ Toda la configuración de actividades vive en **un solo lugar**: la sección `CO
 
 Con ese cambio, la misión correspondiente va a mostrar el botón **"Jugar"** y va a abrir esa URL en una pestaña nueva. Mientras `estado` sea `"proximamente"`, la misión se muestra bloqueada con el texto **"Próximamente"**, sin importar lo que tenga cargado en `url`.
 
-### Cómo agregar más de 3 actividades a un área
+### Cómo agregar más de 3 actividades a un área!!!!!!
 
 Por defecto cada área tiene 3 actividades (definidas por `crearMisiones(3)` dentro de la función `crearAreas`). Si un área necesita más misiones, hay dos formas:
 
 - **Global:** cambiar el `3` por otro número dentro de `crearAreas` (por ejemplo `crearMisiones(4)`) para que todas las áreas tengan esa cantidad por defecto.
 - **Puntual:** después de armar el objeto `plataforma`, agregar manualmente un objeto más al array `actividades` de esa área específica, con la misma forma: `{ nombre: "Actividad 4", estado: "proximamente", url: "" }`.
 
+ ************para cualquier área de la misión 04 (Actividad 4) en adelante*****************
+ 1º) agergar casillero:
+ 
+ obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
+    nombre: "Actividad 4", estado: "proximamente", url: ""
+  });
+
+2º) configurar casillero:
+
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
+    nombre: "Vamos de compras - billetes y monedas",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/billetes-monedas/"
+  });
+ **********************************************************************************
+ 
 ### Cómo agregar un grado, un área o un ciclo nuevo
 
 La plataforma entera se genera a partir del objeto `plataforma` (al final de la sección de configuración de `script.js`). Para agregar:
