@@ -198,6 +198,14 @@
     url: "https://material-icei.github.io/matematica2/cuerpos-geometricos/"
   });
 
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
+    nombre: "Vamos de compras - billetes y monedas",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/billetes-monedas/"
+  });
+
+
+
    
 ////////  ==>>>  ciclo-2
 ////     ==>> 4.º Grado
