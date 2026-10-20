@@ -62,18 +62,19 @@ Por defecto cada área tiene 3 actividades (definidas por `crearMisiones(3)` den
 
  ************para cualquier área de la misión 04 (Actividad 4) en adelante*****************
  1º) agergar casillero:
- 
+ ```js
  obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
     nombre: "Actividad 4", estado: "proximamente", url: ""
   });
-
+```
 2º) configurar casillero:
-
+```js
    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
     nombre: "Vamos de compras - billetes y monedas",
     estado: "disponible",
     url: "https://material-icei.github.io/matematica2/billetes-monedas/"
   });
+```
  **********************************************************************************
  
 ### Cómo agregar un grado, un área o un ciclo nuevo
