@@ -60,7 +60,8 @@ Por defecto cada área tiene 3 actividades (definidas por `crearMisiones(3)` den
 - **Global:** cambiar el `3` por otro número dentro de `crearAreas` (por ejemplo `crearMisiones(4)`) para que todas las áreas tengan esa cantidad por defecto.
 - **Puntual:** después de armar el objeto `plataforma`, agregar manualmente un objeto más al array `actividades` de esa área específica, con la misma forma: `{ nombre: "Actividad 4", estado: "proximamente", url: "" }`.
 
- ************para cualquier área de la misión 04 (Actividad 4) en adelante*****************
+- **para cualquier área de la misión 04 (Actividad 4) en adelante
+  
  1º) agergar casillero:
  ```js
  obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
