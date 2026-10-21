@@ -176,7 +176,7 @@
     configurarActividad(obtenerArea("ciclo-1", "1.º Grado", "Matemática"), 0, {
     nombre: "Sumas y restas",
     estado: "disponible",
-    url: "https://material-icei.github.io/matematica1/suma-resta-2-cifras/"
+    url: "https://material-icei.github.io/matematica1/suma-resta/"
   });
 
    
