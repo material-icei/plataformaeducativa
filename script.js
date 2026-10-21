@@ -231,6 +231,12 @@
     url: "https://material-icei.github.io/matematica4/division/"
   });
 
+    configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 1, {
+    nombre: "Fracciones",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica4/fracciones/"
+  });
+
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
      Cada recurso se muestra como un botón que abre su URL en una pestaña
