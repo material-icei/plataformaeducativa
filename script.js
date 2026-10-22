@@ -221,6 +221,13 @@
   });
 
 
+   ////     ==>> 3.º Grado
+  configurarActividad(obtenerArea("ciclo-1", "3.º Grado", "Lengua"), 0, {
+    nombre: "Taller de escritura",
+    estado: "disponible",
+    url: "https://material-icei.github.io/lengua3/taller-de-escritura/"
+  });
+
 
 
 ////////  ==>>>  ciclo-2
