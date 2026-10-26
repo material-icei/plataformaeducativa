@@ -221,12 +221,20 @@
   });
 
 
+
    ////     ==>> 3.º Grado
   configurarActividad(obtenerArea("ciclo-1", "3.º Grado", "Lengua"), 0, {
     nombre: "Taller de escritura",
     estado: "disponible",
     url: "https://material-icei.github.io/lengua3/taller-de-escritura/"
   });
+
+ configurarActividad(obtenerArea("ciclo-1", "3.º Grado", "Matemática"), 0, {
+    nombre: "Figuras geométricas",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica3/figuras/"
+  });
+   
 
 
 
@@ -238,11 +246,12 @@
     url: "https://material-icei.github.io/matematica4/division/"
   });
 
-    configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 1, {
+ configurarActividad(obtenerArea("ciclo-2", "4.º Grado", "Matemática"), 1, {
     nombre: "Fracciones",
     estado: "disponible",
     url: "https://material-icei.github.io/matematica4/fracciones/"
   });
+
 
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
