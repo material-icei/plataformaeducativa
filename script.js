@@ -253,6 +253,16 @@
   });
 
 
+
+////////  ==>>>  ciclo-3
+////     ==>> 7.º Grado
+  configurarActividad(obtenerArea("ciclo-3", "7.º Grado", "Matemática"), 0, {
+    nombre: "Guardianes de la geometría",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica7/geometria/"
+  });
+
+
   /* --------------------------------------------------------------------------
      RECURSOS DE LA BIBLIOTECA VIRTUAL
      Cada recurso se muestra como un botón que abre su URL en una pestaña
