@@ -226,7 +226,7 @@
   });
 
    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 4, {
-    nombre: "Cuenta parada",
+    nombre: "Cuenta parada - sumas y restas",
     estado: "disponible",
     url: "https://material-icei.github.io/matematica2/cuentaparada/"
   });
