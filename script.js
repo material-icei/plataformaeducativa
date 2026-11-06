@@ -221,6 +221,16 @@
   });
 
 
+    obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
+    nombre: "Actividad 5", estado: "proximamente", url: ""
+  });
+
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 4, {
+    nombre: "Cuenta parada",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/cuentaparada/"
+  });
+
 
    ////     ==>> 3.º Grado
   configurarActividad(obtenerArea("ciclo-1", "3.º Grado", "Lengua"), 0, {
