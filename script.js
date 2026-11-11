@@ -179,6 +179,11 @@
     url: "https://material-icei.github.io/matematica1/suma-resta/"
   });
 
+    configurarActividad(obtenerArea("ciclo-1", "1.º Grado", "Ambiente"), 0, {
+    nombre: "Animales - Dónde viven y qué comen",
+    estado: "disponible",
+    url: "https://material-icei.github.io/animales/"
+  });
    
 
 ////     ==>> 2.º Grado
@@ -229,6 +234,12 @@
     nombre: "Cuenta parada - sumas y restas",
     estado: "disponible",
     url: "https://material-icei.github.io/matematica2/cuentaparada/"
+  });
+
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Ambiente"), 0, {
+    nombre: "Exploradores del cuerpo humano",
+    estado: "disponible",
+    url: "https://material-icei.github.io/naturaleza2/exploradores-cuerpo-humano/"
   });
 
 
