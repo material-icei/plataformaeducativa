@@ -236,6 +236,22 @@
     url: "https://material-icei.github.io/matematica2/cuentaparada/"
   });
 
+   
+   obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
+    nombre: "Actividad 6", estado: "proximamente", url: ""
+  });
+
+   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 5, {
+    nombre: "Multiplicación",
+    estado: "disponible",
+    url: "https://material-icei.github.io/matematica2/multiplicacion/"
+  });
+
+
+
+
+
+   
    configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Ambiente"), 0, {
     nombre: "Exploradores del cuerpo humano",
     estado: "disponible",
