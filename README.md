@@ -1,99 +1,88 @@
-# EduICEI
+# EduICEI — Plataforma educativa gamificada
 
-**EduICEI** es la plataforma educativa gamificada del Colegio ICEI: una landing page que convierte el recorrido escolar en una aventura de videojuego. Los alumnos eligen su **ciclo**, después su **grado** (nivel) y finalmente un **área** pedagógica, donde encuentran sus **misiones** (actividades).
+Plataforma web estática (HTML5 + CSS3 + JavaScript puro, sin frameworks, sin
+backend, sin base de datos y sin login) para el Colegio ICEI (Mendoza,
+Argentina). Permite a cada estudiante elegir su **Ciclo → Grado → Área →
+Actividad (misión)** y acceder a sus actividades.
 
-Está pensada para alumnos de 1.º a 7.º grado, con estética de videojuego educativo moderno sobre la paleta institucional del colegio (azul y rojo).
+## Archivos
 
-## Características
+- `index.html` — estructura de la página (navegación, hero, ciclos, grados,
+  áreas, biblioteca virtual, footer, modal).
+- `style.css` — toda la hoja de estilos (variables institucionales, layout,
+  animaciones, responsive).
+- `script.js` — toda la lógica: los datos de la plataforma (ciclos, grados,
+  áreas, actividades) y el comportamiento de la interfaz.
+- `assets/escudo-icei.png` — escudo institucional (usado en la barra de
+  navegación, la etiqueta del hero y el footer).
+- `assets/escudo-icei-3d.png` — versión del escudo con fondo transparente,
+  usada específicamente en la escena animada del hero (efecto 3D).
 
-- Sitio 100% estático: **HTML5 + CSS3 + JavaScript vanilla**, sin frameworks, sin backend, sin base de datos.
-- Funciona abriendo `index.html` directamente y está listo para publicarse en **GitHub Pages** tal cual.
-- No usa `localStorage`, cuentas, ni ningún tipo de seguimiento de alumnos: toda la experiencia es visual, nada se guarda entre visitas.
-- Sin sonido ni video: la aventura es completamente visual.
-- Responsive: pensado para Chromebooks en horizontal, y adaptado a notebooks y celulares.
+## Colores institucionales (no modificar)
 
-## Estructura de archivos
-
+```css
+--rojo: #af1b2e;
+--azul: #002368;
+--blanco: #ffffff;
 ```
-eduicei/
-├── index.html              → estructura de la página (semántica, sin contenido de ciclos/grados hardcodeado)
-├── style.css                → todos los estilos (paleta institucional, tipografía, animaciones, responsive)
-├── script.js                 → datos de la plataforma + toda la lógica e interacción
-└── assets/
-    └── escudo-icei.png       → escudo institucional del colegio
-```
 
-Los tres archivos deben mantenerse juntos y con esos nombres exactos, ya que `index.html` los referencia por ruta relativa (`style.css`, `script.js`, `assets/escudo-icei.png`).
+## Cómo agregar una nueva actividad real
 
+Toda la configuración de actividades vive en `script.js`, en el bloque
+**"CONFIGURACIÓN DE ACTIVIDADES"**. Cada área nace con 3 casilleros
+("Actividad 1", "Actividad 2", "Actividad 3") en estado `"proximamente"`.
+Para cargar una actividad real en uno de esos casilleros alcanza con:
 
-## Cómo agregar una nueva actividad
-
-Toda la configuración de actividades vive en **un solo lugar**: la sección `CONFIGURACIÓN DE ACTIVIDADES`, al principio del archivo `script.js`. No hace falta tocar `index.html` ni `style.css` para agregar, activar o cambiar actividades.
-
-### Paso a paso
-
-1. Abrí `script.js` con cualquier editor de texto.
-2. Ubicá el ciclo, el grado y el área donde querés agregar o activar la actividad. La estructura sigue este orden: **ciclo → grado → área → actividades**. Los grupos de áreas están definidos como `AREAS_1ER_CICLO`, `AREAS_2DO_CICLO` y `AREAS_3ER_CICLO`, y cada grado los usa mediante `crearAreas(...)`.
-3. Cada área ya tiene 3 actividades generadas automáticamente (`Actividad 1`, `Actividad 2`, `Actividad 3`), todas en estado `"proximamente"`. Para publicar la primera actividad real, hay que modificarla puntualmente después de que se genera la estructura, o directamente editar el objeto de esa actividad si preferís hacerlo a mano.
-4. Cambiá dos cosas en la actividad:
-   - `estado`: de `"proximamente"` a `"disponible"`.
-   - `url`: la dirección completa (con `https://`) donde está publicada esa actividad (normalmente, otro repositorio de GitHub Pages).
-
-**Antes:**
 ```js
-{ nombre: "Actividad 1", estado: "proximamente", url: "" }
+configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 0, {
+  nombre: "Nombre de la actividad",
+  estado: "disponible",
+  url: "https://..."
+});
 ```
 
-**Después:**
+El segundo argumento es el índice del casillero (0, 1 o 2).
+
+## Cómo agregar más de 3 actividades a un área
+
+Si un área ya tiene sus 3 casilleros ocupados y necesitás un 4º (o más),
+`configurarActividad()` no va a tener dónde escribir: como la función hace
+`if (!area || !area.actividades[indice]) return;`, si el casillero no existe
+simplemente no hace nada (falla en silencio, sin error en consola). Por eso,
+antes de configurar el 4º casillero (índice 3) hay que agregarlo manualmente
+con `.push()`:
+
 ```js
-{ nombre: "Actividad 1", estado: "disponible", url: "https://tu-usuario.github.io/actividad-lengua-1/" }
+// 1) Agregar el casillero nuevo
+obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
+  nombre: "Actividad 4",
+  estado: "proximamente",
+  url: ""
+});
+
+// 2) Recién ahora configurarActividad() tiene dónde escribir
+configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
+  nombre: "Nombre de la nueva actividad",
+  estado: "disponible",
+  url: "https://..."
+});
 ```
 
-5. Guardá el archivo y volvé a subirlo a GitHub (o hacé commit + push si ya estás trabajando desde el repositorio).
+Para un 5º, 6º, etc. se repite el mismo patrón con el índice siguiente (4, 5...).
 
-Con ese cambio, la misión correspondiente va a mostrar el botón **"Jugar"** y va a abrir esa URL en una pestaña nueva. Mientras `estado` sea `"proximamente"`, la misión se muestra bloqueada con el texto **"Próximamente"**, sin importar lo que tenga cargado en `url`.
+## Publicar en GitHub Pages
 
-### Cómo agregar más de 3 actividades a un área!!!!!!
+1. Subir `index.html`, `style.css`, `script.js` y la carpeta `assets/` a la
+   raíz del repositorio (o a `/docs` si así se configuró Pages).
+2. Activar GitHub Pages desde la configuración del repositorio, apuntando a
+   la rama y carpeta correspondientes.
+3. No se necesita build ni instalación: son archivos estáticos.
 
-Por defecto cada área tiene 3 actividades (definidas por `crearMisiones(3)` dentro de la función `crearAreas`). Si un área necesita más misiones, hay dos formas:
+## Accesibilidad y rendimiento
 
-- **Global:** cambiar el `3` por otro número dentro de `crearAreas` (por ejemplo `crearMisiones(4)`) para que todas las áreas tengan esa cantidad por defecto.
-- **Puntual:** después de armar el objeto `plataforma`, agregar manualmente un objeto más al array `actividades` de esa área específica, con la misma forma: `{ nombre: "Actividad 4", estado: "proximamente", url: "" }`.
-
-- **para cualquier área de la misión 04 (Actividad 4) en adelante:
-  
- 1º) agregar casillero:
- ```js
- obtenerArea("ciclo-1", "2.º Grado", "Matemática").actividades.push({
-    nombre: "Actividad 4", estado: "proximamente", url: ""
-  });
-```
-2º) configurar casillero:
-```js
-   configurarActividad(obtenerArea("ciclo-1", "2.º Grado", "Matemática"), 3, {
-    nombre: "Vamos de compras - billetes y monedas",
-    estado: "disponible",
-    url: "https://material-icei.github.io/matematica2/billetes-monedas/"
-  });
-```
- **********************************************************************************
- 
-### Cómo agregar un grado, un área o un ciclo nuevo
-
-La plataforma entera se genera a partir del objeto `plataforma` (al final de la sección de configuración de `script.js`). Para agregar:
-
-- **Un área nueva a un grupo existente:** agregá un objeto `{ nombre: "...", icono: "..." }` al array correspondiente (`AREAS_1ER_CICLO`, `AREAS_2DO_CICLO` o `AREAS_3ER_CICLO`).
-- **Un grado nuevo:** agregá una línea `crearGrado("8.º Grado", crearAreas(AREAS_3ER_CICLO))` (o el grupo de áreas que corresponda) dentro del array `grados` del ciclo correspondiente.
-- **Un ciclo nuevo:** copiá la forma de uno de los objetos dentro de `plataforma.ciclos` (con su `id`, `nombre`, `personaje`, `recompensa`, `rasgos` y `grados`) y agregalo al array.
-
-En los tres casos, la navegación, las tarjetas, la ruta de aventura y el acordeón de misiones se generan solos: no hace falta escribir HTML a mano.
-
-## Reemplazar el escudo institucional
-
-El escudo se toma de `assets/escudo-icei.png`. Para reemplazarlo, alcanza con subir un archivo nuevo con exactamente ese nombre y ruta; se usa automáticamente en la barra de navegación, el Hero y el footer, sin recortar ni modificar sus colores.
-
-## Notas importantes
-
-- No hay sistema de login, cuentas ni seguimiento real de alumnos: los "niveles desbloqueables" son solamente una representación visual de la estructura de contenidos.
-- No inventes actividades educativas: usá siempre `Actividad 1`, `Actividad 2`, etc., y dejalas en `"proximamente"` hasta tener la URL real.
-- No uses `iframe` para las actividades: siempre se abren en una pestaña nueva mediante su URL completa.
+- Totalmente responsive (desktop, notebook, tablet y celular).
+- Respeta `prefers-reduced-motion` (desactiva animaciones si el usuario lo
+  prefiere).
+- Navegación por teclado y foco visible en todos los controles interactivos.
+- Sin dependencias externas más que las tipografías de Google Fonts
+  (Oxanium y Rajdhani).

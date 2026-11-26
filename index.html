@@ -1,17 +1,17 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>EduICEI · Tu aventura de aprendizaje</title>
-<meta name="description" content="EduICEI es la plataforma educativa del Colegio ICEI: elegí tu ciclo, tu grado y tu área, y avanzá misión por misión.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>EduICEI · Tu aventura de aprendizaje</title>
+  <meta name="description" content="Plataforma educativa gamificada del Colegio ICEI: elegí tu ciclo, tu grado y tu área para comenzar tus misiones de aprendizaje.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@500;600;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="assets/escudo-icei.png" type="image/png">
 </head>
 <body>
-
 <a class="salto-contenido" href="#contenido-principal">Saltar al contenido principal</a>
 
 <!-- ============================================================
@@ -89,13 +89,10 @@
         <div class="escena-hero" id="escena-hero">
           <div class="escena-hero__aro"></div>
           <div class="escena-hero__personaje escena-hero__personaje--flotar">
-            <div class="personaje-guia personaje-guia--ciclo1 personaje-guia--grande">
-              <span class="personaje-guia__cuerpo"></span>
-              <span class="personaje-guia__cara">
-                <span class="personaje-guia__ojo"></span>
-                <span class="personaje-guia__ojo"></span>
-              </span>
-              <span class="personaje-guia__insignia">🧭</span>
+            <div class="escudo-3d">
+              <span class="escudo-3d__brillo"></span>
+              <img class="escudo-3d__imagen" src="assets/escudo-icei-3d.png" alt="Escudo del Colegio ICEI"
+                   onerror="this.closest('.escudo-3d').style.display='none';">
             </div>
           </div>
           <span class="objeto-flotante objeto-flotante--1">📖</span>
@@ -243,8 +240,6 @@
     <button class="boton boton--primario modal__boton" type="button" id="modal-volver">Volver a la aventura</button>
   </div>
 </div>
-
 <script src="script.js"></script>
 </body>
 </html>
-
